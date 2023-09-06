@@ -21,17 +21,24 @@ class App extends Component {
 
   addCartItem = product => {
     const {cartList} = this.state
-    if (cartList.includes(product.id)) {
+    const productObject = cartList.find(
+      eachCartItem => eachCartItem.id === product.id,
+    )
+    if (productObject) {
       this.setState(prevState => ({
-        cartList: prevState.cartList.map(eachItem => {
-          if (eachItem.id === product.id) {
-            return {...eachItem, quantity: eachItem.quantity + product.quantity}
+        cartList: prevState.cartList.map(eachCartItem => {
+          if (productObject.id === eachCartItem.id) {
+            const updateQuantity = eachCartItem.quantity + product.quantity
+
+            return {...eachCartItem, quantity: updateQuantity}
           }
-          return eachItem
+          return eachCartItem
         }),
       }))
     } else {
-      this.setState(prevState => ({cartList: [...prevState.cartList, product]}))
+      const updateCartList = [...cartList, product]
+
+      this.setState({cartList: updateCartList})
     }
   }
 
